@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// Random
+
 func init() {
 	// seed the random number generator
 	// with the current time
