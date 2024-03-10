@@ -16,6 +16,9 @@ migratedown:
 sqlc:
 	sqlc generate
 
+startdb:
+	docker start postgres12
+
 test:
 	go test -v -cover ./...
 
