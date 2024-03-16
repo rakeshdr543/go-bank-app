@@ -57,7 +57,7 @@ func (server *Server) validateCurrencyAccount(ctx *gin.Context, accountId int64,
 		return false
 	}
 	if account.Currency != currency {
-		err := fmt.Errorf(`Currency mismatch for account id ` + string(accountId) + ` and currency ` + currency + ` is not allowed`)
+		err := fmt.Errorf(`Currency mismatch for account id ` + string(rune(accountId)) + ` and currency ` + currency + ` is not allowed`)
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 
 		return false
