@@ -19,7 +19,7 @@ type Server struct {
 
 func NewServer(config util.Config, store *db.Store) *Server {
 
-	tokenMaker, err := token.NewPasetoMaker(
+	tokenMaker, err := token.NewJWTMaker(
 		config.TokenSymmetricKey,
 	)
 
@@ -46,13 +46,15 @@ func (server *Server) setupRouter() {
 
 	router.POST("/users/login", server.loginUser)
 	router.POST("/users", server.createUser)
-	router.GET("/users/:username", server.getUser)
 
-	router.POST("/accounts", server.createAccount)
-	router.GET("/accounts/:id", server.getAccount)
-	router.GET("/accounts", server.listAccounts)
+	groupRouter := router.Group("/", authMiddleware(server.tokenMaker))
+	groupRouter.GET("/users/:username", server.getUser)
 
-	router.POST("/transfers", server.createMoneyTransfer)
+	groupRouter.POST("/accounts", server.createAccount)
+	groupRouter.GET("/accounts/:id", server.getAccount)
+	groupRouter.GET("/accounts", server.listAccounts)
+
+	groupRouter.POST("/transfers", server.createMoneyTransfer)
 
 	server.router = router
 }

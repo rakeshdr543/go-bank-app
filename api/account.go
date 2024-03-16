@@ -1,15 +1,16 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 	db "sampla_bank/db/sqlc"
+	"sampla_bank/token"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 )
 
 type createAccountRequest struct {
-	Owner    string `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,currency"`
 }
 
@@ -20,8 +21,11 @@ func (server *Server) createAccount(ctx *gin.Context) {
 		return
 	}
 
+	// Access owner with token
+	owner := ctx.MustGet(authorizationPayloadKey).(*token.Payload).Username
+
 	arg := db.CreateAccountParams{
-		Owner:    req.Owner,
+		Owner:    owner,
 		Currency: req.Currency,
 		Balance:  0,
 	}
@@ -63,6 +67,12 @@ func (server *Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
+	owner := ctx.MustGet(authorizationPayloadKey).(*token.Payload).Username
+	if account.Owner != owner {
+		err := errors.New("account does not belong to the authenticated user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+	}
+
 	ctx.JSON(http.StatusOK, account)
 }
 
@@ -78,7 +88,10 @@ func (server *Server) listAccounts(ctx *gin.Context) {
 		return
 	}
 
+	owner := ctx.MustGet(authorizationPayloadKey).(*token.Payload).Username
+
 	arg := db.ListAccountsParams{
+		Owner:  owner,
 		Limit:  req.Size,
 		Offset: (req.Page - 1) * req.Size,
 	}
