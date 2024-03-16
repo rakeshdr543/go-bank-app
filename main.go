@@ -8,7 +8,7 @@ import (
 
 	"sampla_bank/api"
 	db "sampla_bank/db/sqlc"
-	"sampla_bank/db/util"
+	"sampla_bank/util"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	}
 
 	store := db.NewStore(conn)
-	server := api.NewServer(store)
+	server := api.NewServer(config, store)
 	err = server.Start(config.Address)
 	if err != nil {
 		log.Fatal("cannot start server:", err)

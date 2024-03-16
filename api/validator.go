@@ -1,7 +1,7 @@
 package api
 
 import (
-	"sampla_bank/db/util"
+	"sampla_bank/util"
 
 	"github.com/go-playground/validator/v10"
 )

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
-	"sampla_bank/db/util"
+	"sampla_bank/util"
 	"testing"
 
 	_ "github.com/lib/pq"

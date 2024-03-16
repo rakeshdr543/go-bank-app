@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"sampla_bank/db/util"
+	"sampla_bank/util"
 	"testing"
 	"time"
 
