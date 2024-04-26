@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	db "sampla_bank/db/sqlc"
+	"sampla_bank/token"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,11 +23,22 @@ func (server *Server) createMoneyTransfer(ctx *gin.Context) {
 		return
 	}
 
-	if !server.validateCurrencyAccount(ctx, req.From_Account, req.Currency) {
+	fromAccount, valid := server.validateAccount(ctx, req.From_Account, req.Currency)
+
+	if !valid {
 		return
 	}
 
-	if !server.validateCurrencyAccount(ctx, req.To_Account, req.Currency) {
+	owner := ctx.MustGet(authorizationPayloadKey).(*token.Payload).Username
+
+	if fromAccount.Owner != owner {
+		err := fmt.Errorf("account %d does not belong to the authenticated user", req.From_Account)
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	_, valid = server.validateAccount(ctx, req.To_Account, req.Currency)
+	if !valid {
 		return
 	}
 
@@ -46,23 +58,23 @@ func (server *Server) createMoneyTransfer(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, account)
 }
 
-func (server *Server) validateCurrencyAccount(ctx *gin.Context, accountId int64, currency string) bool {
+func (server *Server) validateAccount(ctx *gin.Context, accountId int64, currency string) (db.Account, bool) {
 	account, err := server.store.GetAccount(ctx, accountId)
 	if err != nil {
 		if err.Error() == "no rows in result set" {
 			ctx.JSON(http.StatusBadRequest, errorResponse(err))
-			return false
+			return account, false
 		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return false
+		return account, false
 	}
 	if account.Currency != currency {
 		err := fmt.Errorf(`Currency mismatch for account id ` + string(rune(accountId)) + ` and currency ` + currency + ` is not allowed`)
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 
-		return false
+		return account, false
 	}
 
-	return true
+	return account, true
 
 }
