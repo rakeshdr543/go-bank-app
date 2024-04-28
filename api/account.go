@@ -3,8 +3,9 @@ package api
 import (
 	"errors"
 	"net/http"
-	db "sampla_bank/db/sqlc"
-	"sampla_bank/token"
+
+	db "github.com/rakeshdr543/go-bank-app/db/sqlc"
+	"github.com/rakeshdr543/go-bank-app/token"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"

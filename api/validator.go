@@ -1,7 +1,7 @@
 package api
 
 import (
-	"sampla_bank/util"
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	"github.com/go-playground/validator/v10"
 )

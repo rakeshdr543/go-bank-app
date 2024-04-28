@@ -2,9 +2,10 @@ package api
 
 import (
 	"net/http"
-	db "sampla_bank/db/sqlc"
-	"sampla_bank/util"
 	"time"
+
+	db "github.com/rakeshdr543/go-bank-app/db/sqlc"
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

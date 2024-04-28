@@ -2,8 +2,9 @@ package api
 
 import (
 	"net/http"
-	"sampla_bank/token"
-	"sampla_bank/util"
+
+	"github.com/rakeshdr543/go-bank-app/token"
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	"time"
 

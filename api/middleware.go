@@ -3,8 +3,9 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"sampla_bank/token"
 	"strings"
+
+	"github.com/rakeshdr543/go-bank-app/token"
 
 	"github.com/gin-gonic/gin"
 )

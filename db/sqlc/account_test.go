@@ -2,8 +2,9 @@ package db
 
 import (
 	"context"
-	"sampla_bank/util"
 	"testing"
+
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	"github.com/stretchr/testify/require"
 )

@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"log"
 	"os"
-	"sampla_bank/util"
 	"testing"
+
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	_ "github.com/lib/pq"
 )

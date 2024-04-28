@@ -1,9 +1,9 @@
 package api
 
 import (
-	db "sampla_bank/db/sqlc"
-	"sampla_bank/token"
-	"sampla_bank/util"
+	db "github.com/rakeshdr543/go-bank-app/db/sqlc"
+	"github.com/rakeshdr543/go-bank-app/token"
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -17,14 +17,14 @@ type Server struct {
 	router     *gin.Engine
 }
 
-func NewServer(config util.Config, store *db.Store) *Server {
+func NewServer(config util.Config, store *db.Store) (*Server, error) {
 
 	tokenMaker, err := token.NewJWTMaker(
 		config.TokenSymmetricKey,
 	)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	server := &Server{store: store,
@@ -38,7 +38,7 @@ func NewServer(config util.Config, store *db.Store) *Server {
 
 	server.setupRouter()
 
-	return server
+	return server, nil
 }
 
 func (server *Server) setupRouter() {

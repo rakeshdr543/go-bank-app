@@ -1,9 +1,10 @@
 package token
 
 import (
-	"sampla_bank/util"
 	"testing"
 	"time"
+
+	"github.com/rakeshdr543/go-bank-app/util"
 
 	"github.com/stretchr/testify/require"
 )
